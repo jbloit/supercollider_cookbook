@@ -1,24 +1,51 @@
 // https://en.wikibooks.org/wiki/Designing_Sound_in_SuperCollider/Insects
 
+// synth voices handling: "http://forum.critterandguitari.com/t/supercollider-on-organelle/2051"
+
+MIDIClient.init;
+MIDIIn.connectAll;
+
+~voices = Dictionary.new;
+
 // FIELD CRICKET
-(
 SynthDef(\cricket,
 	{
-	|out=0, rate=1.5|
-		var modulator, mod1, mod2, mod3;
+		|out=0, rate=1.5, gate = 1|
+		var modulator, mod1, mod2, mod3, env, sig;
 
-	// repeat time is 0.7s: equates to 1.43 Hz.
-	modulator = LFSaw.ar(rate, 1, 0.5, 0.5);
-	mod2 = (modulator * 40.6 * 2pi).cos.squared;
-	mod3 = modulator * 3147;
-	mod3 = (mod3 * 2pi).cos + ((mod3 * 2 * 2pi).cos * 0.3);
-	mod1 = ((Wrap.ar(modulator.min(0.1714) * 5.84) - 0.5).squared * (-4) + 1) * (mod2 * mod3);
-	mod1 = (mod1 * 0.1);
-	Out.ar(0, mod1);
+		// repeat time is 0.7s: equates to 1.43 Hz.
+		modulator = LFSaw.ar(rate, 1, 0.5, 0.5);
+		mod2 = (modulator * 40.6 * 2pi).cos.squared;
+		mod3 = modulator * 3147;
+		mod3 = (mod3 * 2pi).cos + ((mod3 * 2 * 2pi).cos * 0.3);
+		mod1 = ((Wrap.ar(modulator.min(0.1714) * 5.84) - 0.5).squared * (-4) + 1) * (mod2 * mod3);
+		mod1 = (mod1 * 0.1);
+
+		env = Env.adsr();
+		sig = mod1 * EnvGen.kr(env, gate, doneAction:2);
+
+		Out.ar(0, sig!2);
 }).add;
 
-Synth(\cricket, [\rate, 3]);
-)
+MIDIdef.noteOn(\noteOnTest, {
+	|vel, nn |
+	postf("NOTE ON vel:% nn: %\n", [vel, nn]);
 
-a.free;
+
+	if(~voices[nn]!=nil,{~voices[nn].set(\gate,0);});
+	~voices[nn] = Synth.new(\cricket,[\rate, nn/50]);
+};
+);
+
+MIDIdef.noteOff(\noteOffTest, {
+	|vel, nn |
+	[vel, nn].postln;
+
+        if(~voices[nn]!=nil,{~voices[nn].set(\gate,0);});
+        ~voices[nn] = nil;
+};
+);
+
+
+
 

@@ -8,3 +8,12 @@ a.play;
 s.scope
 )
 
+
+
+// perc envelope
+(
+var env;
+env = Env.perc();
+a = {SinOsc.ar(mul:EnvGen.kr(env, doneAction:2))!2};
+a.play;
+)
