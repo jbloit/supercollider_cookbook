@@ -5,7 +5,8 @@
 MIDIClient.init;
 MIDIIn.connectAll;
 
-~voices = Dictionary.new;
+~maxVoices = 2;
+~voices = Dictionary.new(~maxVoices);
 
 // FIELD CRICKET
 SynthDef(\cricket,
@@ -31,9 +32,14 @@ MIDIdef.noteOn(\noteOnTest, {
 	|vel, nn |
 	postf("NOTE ON vel:% nn: %\n", [vel, nn]);
 
-
-	if(~voices[nn]!=nil,{~voices[nn].set(\gate,0);});
-	~voices[nn] = Synth.new(\cricket,[\rate, nn/50]);
+	if(~voices[nn]!=nil,{
+		~voices[nn].set(\gate,0);
+		~voices[nn] = nil;
+	}
+	);
+	if (~voices.size<~maxVoices, {
+		~voices[nn] = Synth.new(\cricket,[\rate, nn/50]);}
+	);
 };
 );
 
