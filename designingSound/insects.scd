@@ -14,7 +14,7 @@ SynthDef(\cricket,
 	mod3 = (mod3 * 2pi).cos + ((mod3 * 2 * 2pi).cos * 0.3);
 	mod1 = ((Wrap.ar(modulator.min(0.1714) * 5.84) - 0.5).squared * (-4) + 1) * (mod2 * mod3);
 	mod1 = (mod1 * 0.1);
-	Out.ar(0, mod1);
+	Out.ar(0, mod1!2);
 }).add;
 
 Synth(\cricket, [\rate, 3]);
