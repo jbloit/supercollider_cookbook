@@ -18,9 +18,10 @@ y = Synth(\sampler, [\bufNum, ~tac.bufnum]);
 
 TempoClock.tempo = 1;
 
+
 (
 Pbind(\instrument, \sampler,
 	\dur, 1/4,
-	\rate, Prand,
+	\rate, Pexprand(0.4, 2),
 ).play;
 )
