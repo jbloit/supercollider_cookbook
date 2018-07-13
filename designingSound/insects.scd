@@ -17,8 +17,10 @@ SynthDef(\cricket,
 	Out.ar(0, mod1!2);
 }).add;
 
-Synth(\cricket, [\rate, 3]);
 )
+
+a=Synth(\cricket, [\rate, 1]);
+
 
 a.free;
 

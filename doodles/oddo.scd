@@ -1,6 +1,6 @@
 TempoClock.tempo = 1;
-c1 = [0, 3, 7];
-c2 = [0, 4, 7];
+~c1 = [0, 3, 7];
+~c2 = [0, 4, 7];
 
 (
 SynthDef(\tone, {
@@ -22,7 +22,7 @@ SynthDef(\tone, {
 Pbind(
 	\instrument, \tone,
 	\dur, 1,
-	\midinote, 42
+	\midinote, 102
 ).play;
 )
 
