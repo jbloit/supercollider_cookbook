@@ -53,10 +53,12 @@ SynthDef(\perc, {
 )
 
 
-(
+(Pdef(\patPerc,
 Pbind(
 	\instrument, \perc,
 	\dur, Prand([1/4, 1/8, 1/8, 1/16 ], inf),
 	\rel, Pkey(\dur),
 ).play;
 )
+)
+

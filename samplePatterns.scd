@@ -3,9 +3,9 @@
 Buffer.freeAll;
 
 // ~samplesDir = thisProcess.nowExecutingPath.dirname +/+ "../soundfiles";
-// ~samplesDir = "/home/jbloit/sounds/DataBending";
+ ~samplesDir = "/home/jbloit/sounds/DataBending";
 
-~samplesDir = thisProcess.nowExecutingPath.dirname +/+ "../soundfiles";
+// ~samplesDir = thisProcess.nowExecutingPath.dirname +/+ "../soundfiles";
 ~tac = Buffer.read(s, ~samplesDir +/+ "blipGlitch_comic_book.wav");
 // See num frames:
 ~tac.numFrames;
