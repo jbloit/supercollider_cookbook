@@ -45,7 +45,7 @@ SensorMaracas {
 
 /*
 Usage:
-// WARNING: the triggerUpwards mode doesn't work yet...
+
 a=SensorMaracas.new(0.5, 100)
 -> a SensorMaracas
 
