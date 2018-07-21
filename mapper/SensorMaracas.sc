@@ -1,12 +1,11 @@
 SensorMaracas {
 	// Turn continuous values into note on/note off states, when sensor changes direction.
+	// increase filter order (int values > 1) for smoother reaction.
 
 	/*
-	Returns a state index based on previous and current values of light sensors:
+	Returns a state index based on previous and current values of sensors:
 	isNoteOn: 2
 	isNoteOff: -1
-	isOn: 1
-	isOff: 0
 	*/
 	var <>thresh, filterOrder, prevVal, prevDirection, prevArray;
 	*new {|thresh= 0.5, filterOrder=10|
@@ -47,16 +46,9 @@ SensorMaracas {
 /*
 Usage:
 // WARNING: the triggerUpwards mode doesn't work yet...
-a=SensorButton.new(0.5, true)
--> a SensorButton
+a=SensorMaracas.new(0.5, 100)
+-> a SensorMaracas
 
 a.process(0.1)
--> -1
-
-a.process(0.2)
--> 0
-
-a.process(0.8)
--> 2
 
 */
