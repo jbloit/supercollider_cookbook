@@ -24,7 +24,7 @@ SynthDef(\testSynth,
 
 MIDIdef.noteOn(\noteOnTest, {
 	|vel, nn |
-	postf("NOTE ON vel:% nn: %\n", [vel, nn]);
+	//postf("NOTE ON vel:% nn: %\n", [vel, nn]);
 
 	if(~voices[nn]!=nil,{
 		~voices[nn].set(\gate,0);
@@ -39,7 +39,7 @@ MIDIdef.noteOn(\noteOnTest, {
 
 MIDIdef.noteOff(\noteOffTest, {
 	|vel, nn |
-	[vel, nn].postln;
+	//[vel, nn].postln;
 
         if(~voices[nn]!=nil,{~voices[nn].set(\gate,0);});
         ~voices[nn] = nil;
