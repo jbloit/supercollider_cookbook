@@ -1,3 +1,5 @@
+// make sure you install the sensor<InstrumentType>.sc classes
+
 MIDIClient.init;
 MIDIIn.connectAll;
 
@@ -18,8 +20,24 @@ SynthDef("kick", {
 	Out.ar(out, sig);
 }).send(s);
 
+SynthDef(\kick3,{arg out=0,amp=1,gate = 1, tu = 1, rel =3,freq=60;
+	var env = EnvGen.ar(Env.perc(0,rel),gate,doneAction:2);
+	var frequ = EnvGen.ar(Env([130,freq,30],[0.05,rel]));
+	var sig = SinOsc.ar(freq*tu,0,env);
+	Out.ar(out,sig * amp);
+}).add;
+
+
+
+SynthDef(\kicknoise,{arg out=0, amp=0.5;
+	var env = EnvGen.ar(Env([0,1,0],[0.01,1]),doneAction:2);
+	var freq =EnvGen.ar(Env([20000,100,30],[0.005,1]));
+	var sig =  SinOsc.ar(freq,0,env)+(WhiteNoise.ar(1)*env);
+	Out.ar(out,sig*amp);
+}).add;
+
 // will send a state=2 value when input crosses threshold
-a=SensorButton.new(0.5)
+a=SensorKey.new(0.5);
 
 MIDIdef.cc(\ccTest, {
 	|val|
@@ -27,3 +45,16 @@ MIDIdef.cc(\ccTest, {
 	if ((state==2),  {Synth(\kick)});
 };);
 
+MIDIdef.cc(\ccTest).free;
+
+// will send a state=2 value when input changes direction
+a=SensorMaracas.new(0.01, 120);
+
+MIDIdef.cc(\ccMaracas, {
+	|val|
+	var state = a.process(val/127);
+	// (val/127).postln;
+	if ((state==2),  {Synth(\kick)});
+};);
+
+MIDIdef.cc(\ccMaracas).free;
