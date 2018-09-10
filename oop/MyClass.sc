@@ -30,3 +30,5 @@ MyClass {
 		^((myArg*2) + myProperty);
 	}
 }
+
+Platform.systemExtensionDir
