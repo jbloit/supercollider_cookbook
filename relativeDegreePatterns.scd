@@ -30,6 +30,7 @@ Pdefn(\degree, Pseq([0,1,5], inf));
 ~scale = [0,4,7,12];
 )
 
+// pick a random scale
 (
 ~transpose = 1;
 Pdefn(\degree, Pseq([0,1,5], inf));
@@ -86,3 +87,5 @@ Scale.directory
 
 Pdef(\pattern).stop;
 Pdef(\pattern).play;
+
+
