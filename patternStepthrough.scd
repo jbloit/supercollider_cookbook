@@ -1,10 +1,4 @@
-// this is not working yet.
-// ask supercollider forum
-
-t = Pbind( \freq, Pseq([440,880], inf) ).asStream;
-t.next(Event.default);
-t.next(Event.default);
-t.next(Event.default);
+// Step through a pattern's events
 
 
 (
@@ -16,15 +10,19 @@ SynthDef(\help_sinegrain,
     }).add;
 )
 
-Synth(\help_sinegrain)
+// test synth
+Synth(\help_sinegrain);
 
+// define pattern
+(
 t = Pbind(
-	\instrument, \help_sinegrain, \freq, Pseq([440,880], inf)
+	\instrument, \help_sinegrain, \freq, Pseq([440,880], inf), \sustain, 0.9;
 ).asStream;
+)
 
+// step through
+t.next(Event.default).play;
 
-t.next(Event.default);
-t.next(Event.default);
-t.next(Event.default);
-t.play;
-t.next()
+// reset pattern
+t.reset;
+
