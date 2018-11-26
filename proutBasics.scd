@@ -30,3 +30,13 @@ Pbind(
     \dur, 0.1
 ).play;
 )
+
+(
+var a;
+a = Environment.make({
+    ~a = 100;
+    ~b = 200;
+    ~c = 300;
+});
+a.postln;
+)
