@@ -1,4 +1,4 @@
-
+//////////////////////////////////////////// AUDIO
 
 // a trigger signal
 (
@@ -18,14 +18,28 @@ SynthDef(\tosc, {|out=0, in=0|
 }).add;
 )
 
+(
 Bus.clear;
 b = Bus.audio(s, 1);
 b.index
+)
 
+(
 // order of execution is important here, new synths are added on top
 c = Synth(\tosc, [\in, b.index]);
 d = Synth(\trig, [\out, b.index]);
+)
 
+// more control over the order of execution:
+(
+e = Synth(\trig, [\out, b.index]);
+f = Synth.after(e, \tosc, [\in, b.index]);
+)
+(
+c.free;
+d.free;
+e.free;
+f.free;
+)
 
-c.free
-d.free
+//////////////////////////////////////////// CONTROL 
