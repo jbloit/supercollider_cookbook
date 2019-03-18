@@ -8,6 +8,8 @@
 // s.options.blockSize = 512;
 // s.options.blockSize;
 
+// s.latency = 0.01;
+
 SynthDef(\perc,
 	{
 		|amp=0.1, pan=0|
@@ -27,7 +29,7 @@ MIDIFunc.trace( false );
 MIDIdef.noteOn(\noteOnTest, {
 	|vel, nn |
 	Synth(\perc, [\amp, vel/127]);
-	// postf("NOTE ON vel:% nn: %\n", vel, nn);
+	postf("NOTE ON vel:% nn: %\n", vel, nn);
 
 };
 );
