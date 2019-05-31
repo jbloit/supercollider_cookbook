@@ -2,6 +2,9 @@ MIDIClient.init;
 
 m = MIDIOut.newByName("ESI-ROMIO", "ESI-ROMIO MIDI 1").latency = (0.2555);
 
+// or on Linux (each message will be sent to all ports connected to SuperCollider's first MIDI output.)
+m = MIDIOut(0);
+
 (
 ~midiPattern = Pbind(
     //specifies type of message sent

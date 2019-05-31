@@ -9,7 +9,7 @@
 // s.options.blockSize;
 
 // s.latency = 0.01;
-
+(
 SynthDef(\perc,
 	{
 		|amp=0.1, pan=0|
@@ -17,7 +17,7 @@ SynthDef(\perc,
 		sig = SinOsc.ar(mul: EnvGen.ar(Env.perc(0.001), doneAction:2));
 		Out.ar(0, Pan2.ar(sig*amp, pan));
 }).add;
-
+)
 
 MIDIClient.init;
 MIDIIn.connectAll;
