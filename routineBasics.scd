@@ -1,6 +1,6 @@
 // From the routine doc
 
-a = Routine.new({ 1.yield; 2.yield; });
+a = Routine({ 1.yield; 2.yield; });
 a.next.postln;
 a.next.postln;
 a.next.postln;

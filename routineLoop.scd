@@ -1,4 +1,4 @@
-~r = Routine.new({
+~r = Routine({
 	{
 		// Do something
 		rrand(0,9).postln;
