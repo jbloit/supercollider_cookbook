@@ -24,13 +24,13 @@ c = Synth(\c);
 // Explicitly set the path, or else all recordings get the same file name, since they are triggered at the same time.
 (
 ~ar = Recorder(s);
-~ar.prepareForRecord(path: "~/a.aiff", numChannels:1);
+~ar.prepareForRecord(path: thisProcess.platform.recordingsDir++"/a.aiff", numChannels:1);
 
 ~br = Recorder(s);
-~br.prepareForRecord(path: "~/b.aiff", numChannels:1);
+~br.prepareForRecord(path: thisProcess.platform.recordingsDir++"/b.aiff", numChannels:1);
 
 ~cr = Recorder(s);
-~cr.prepareForRecord(path: "~/c.aiff", numChannels:1);
+~cr.prepareForRecord(path: thisProcess.platform.recordingsDir++"/c.aiff", numChannels:1);
 
 )
 
