@@ -11,7 +11,7 @@ SynthDef(\a, {|out=0, amp=0.1|
 
 (
 var detector = Synth(\a);
-// Watch the node, and stop recording when it frees itself.
+// Watch the node, and do something when it frees itself
 NodeWatcher.register(detector);
 detector.onFree({
 	"a is done".postln;
