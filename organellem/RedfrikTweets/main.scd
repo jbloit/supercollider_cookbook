@@ -1,6 +1,8 @@
 // play tweets by redfrik
 
-
+// test
+// a=Synth(\t3)
+// a.free
 
 ~voices = Dictionary.new;
 
@@ -28,8 +30,20 @@ SynthDef(\t2, {
 	|amp=0.1, pan=0, out=0, gate=1|
 	var sig, env;
 
-	//--tweet0000
+	//--tweet0000 (LOUD!)
 	sig = {GlitchRHPF.ar(GbmanN.ar([2300,1150]),LFSaw.ar(Pulse.ar(4,[1,2]/8,1,LFPulse.ar(1/8)/5+1))+2)};
+
+	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
+	Out.ar(out, Pan2.ar(sig*env, pan));
+}
+).add;
+
+SynthDef(\t3, {
+	|amp=0.1, pan=0, out=0, gate=1|
+	var sig, env;
+
+//--tweet0008
+	sig = {x=LFNoise1.ar(0.5!2);Formlet.ar(Crackle.ar(x.range(1.8,1.98)),TExpRand.ar(200,2e3,x).lag(2),x.range(5e-4,1e-3),0.0012)};
 
 	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
 	Out.ar(out, Pan2.ar(sig*env, pan));
@@ -72,6 +86,10 @@ SynthDef(\t2, {
 			},
 			61, {
 				~voices[note] = Synth.new(\t2, [\out, ~master]);
+				~led.value(1);
+			},
+			62, {
+				~voices[note] = Synth.new(\t3, [\out, ~master]);
 				~led.value(1);
 			},
 		);
