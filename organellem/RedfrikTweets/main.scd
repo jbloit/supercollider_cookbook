@@ -2,8 +2,7 @@
 
 
 
-
-~synth;
+~voices = Dictionary.new;
 
 ~master = Bus.audio(s, 2);
 SynthDef(\masterGain,
@@ -16,11 +15,13 @@ SynthDef(\masterGain,
 
 
 SynthDef(\t1, {
-	|amp=0.1, pan=0, out=0|
-	var sig, a;
+	|amp=0.1, pan=0, out=0, gate=1|
+	var sig, a, env;
 	a=LFTri;
 	sig=LFPulse.ar(a.ar(Duty.ar(1/8,0,Dswitch([Dseq((1..8),4),Dseq([60,1,2],[4,3])]/2,Dseq([0,1],99))*99),0,3e3,300));
-	Out.ar(out, Pan2.ar(sig*amp, pan));
+	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
+
+	Out.ar(out, Pan2.ar(sig*env, pan));
 }
 ).add;
 
@@ -46,14 +47,20 @@ SynthDef(\t1, {
 
 ~notesfunc = {
 	arg func, msg, note, vel;
+
 	~oled.screen(3, format("Note % %", note, vel));
 
-	if ( vel==0, {~synth.free},
-		{
-			~synth = Synth(\t1, [\out, ~master]);
-		}
-	);
+	if(vel>0 , {
+		if(~voices[note]!=nil,{~voices[note].set(\gate,0);});
+		~voices[note] = Synth.new(\t1, [\out, ~master]);
+    	~led.value(1);
+	} , {
+		if(~voices[note]!=nil,{~voices[note].set(\gate,0);});
+		~voices[note] = nil;
+		~led.value(0);
+	};)
 };
+
 // register key callback
 ~notes.addDependant(~notesfunc);
 
