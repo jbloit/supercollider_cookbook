@@ -20,10 +20,22 @@ SynthDef(\t1, {
 	a=LFTri;
 	sig=LFPulse.ar(a.ar(Duty.ar(1/8,0,Dswitch([Dseq((1..8),4),Dseq([60,1,2],[4,3])]/2,Dseq([0,1],99))*99),0,3e3,300));
 	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
-
 	Out.ar(out, Pan2.ar(sig*env, pan));
 }
 ).add;
+
+SynthDef(\t2, {
+	|amp=0.1, pan=0, out=0, gate=1|
+	var sig, env;
+
+	//--tweet0000
+	sig = {GlitchRHPF.ar(GbmanN.ar([2300,1150]),LFSaw.ar(Pulse.ar(4,[1,2]/8,1,LFPulse.ar(1/8)/5+1))+2)};
+
+	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
+	Out.ar(out, Pan2.ar(sig*env, pan));
+}
+).add;
+
 
 ~masterGain = Synth(\masterGain);
 
@@ -52,8 +64,18 @@ SynthDef(\t1, {
 
 	if(vel>0 , {
 		if(~voices[note]!=nil,{~voices[note].set(\gate,0);});
-		~voices[note] = Synth.new(\t1, [\out, ~master]);
-    	~led.value(1);
+
+		switch(note,
+			60, {
+				~voices[note] = Synth.new(\t1, [\out, ~master]);
+				~led.value(1);
+			},
+			61, {
+				~voices[note] = Synth.new(\t2, [\out, ~master]);
+				~led.value(1);
+			},
+		);
+
 	} , {
 		if(~voices[note]!=nil,{~voices[note].set(\gate,0);});
 		~voices[note] = nil;
