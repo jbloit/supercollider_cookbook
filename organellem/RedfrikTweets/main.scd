@@ -10,9 +10,16 @@ a.set(\p0, 1,\p1,1,\p2,1,\p3,1)
 a.free*/
 
 ~voices = Dictionary.new;
+
+// init parameteters dict
 ~params = Dictionary.new;
+(60..83).do(
+	{|i|
+		~params[i] = 1!4;
+	}
+);
 
-
+//master audio bus that all synths output to
 ~master = Bus.audio(s, 2);
 SynthDef(\masterGain,
 	{ |amp=0.2|
@@ -71,10 +78,8 @@ SynthDef(\t4, {
 
 
 ~masterGain = Synth(\masterGain);
-
-
 ~oled.screen(1, "Redfrik Tweets");
-~currentPressedNote = -1;
+~currentNote = -1;
 ~isAuxOn = false;
 
 // create knob callback
@@ -87,10 +92,19 @@ SynthDef(\t4, {
 		{
 			// assign the 4 first knobs to parameters, when the note is pressed. octatrack style.
 			switch(knob,
-				0, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p0,value);});},
-				1, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p1,value);});},
-				2, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p2,value);});},
-				3, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p3,value);});},
+				0, {if (~voices[~currentNote]!=nil, {
+					~voices[~currentNote].set(\p0,value);
+					~params[~currentNote][0] =value;
+				});},
+				1, {if (~voices[~currentNote]!=nil, {~voices[~currentNote].set(\p1,value);
+					~params[~currentNote][1] =value;
+				});},
+				2, {if (~voices[~currentNote]!=nil, {~voices[~currentNote].set(\p2,value);
+					~params[~currentNote][2] =value;
+				});},
+				3, {if (~voices[~currentNote]!=nil, {~voices[~currentNote].set(\p3,value);
+					~params[~currentNote][3] =value;
+				});},
 			);
 		}
 	);
@@ -112,27 +126,27 @@ SynthDef(\t4, {
 
 	if(vel>0 , {
 
-		~currentPressedNote = note;
+		~currentNote = note;
 
 		if(~voices[note]!=nil,{~voices[note].set(\gate,0);});
 
 		switch(note,
 			60, {
-				~voices[note] = Synth.new(\t1, [\out, ~master]);
+				~voices[note] = Synth.new(\t1, [\out, ~master, \p0, ~params[note][0],\p1, ~params[note][1],\p2, ~params[note][2],\p3, ~params[note][3] ]);
 				~led.value(1);
 			},
 			61, {
-				~voices[note] = Synth.new(\t2, [\out, ~master]);
+				~voices[note] = Synth.new(\t2, [\out, ~master, \p0, ~params[note][0],\p1, ~params[note][1],\p2, ~params[note][2],\p3, ~params[note][3] ]);
 				~led.value(1);
 			},
 			62, {
-				~voices[note] = Synth.new(\t3, [\out, ~master]);
+				~voices[note] = Synth.new(\t3, [\out, ~master, \p0, ~params[note][0],\p1, ~params[note][1],\p2, ~params[note][2],\p3, ~params[note][3] ]);
 				~led.value(1);
 			},
 		);
 
 	} , {
-		~currentPressedNote = -1;
+		~currentNote = -1;
 		if(~voices[note]!=nil,{~voices[note].set(\gate,0);});
 		~voices[note] = nil;
 		~led.value(0);
