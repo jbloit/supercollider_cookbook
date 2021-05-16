@@ -10,6 +10,7 @@ a.set(\p0, 1,\p1,1,\p2,1,\p3,1)
 a.free*/
 
 ~voices = Dictionary.new;
+~params = Dictionary.new;
 
 
 ~master = Bus.audio(s, 2);
@@ -83,24 +84,18 @@ SynthDef(\t4, {
 
 	// knob4 is the volume knob on the organelle
 	if (knob==4, {~masterGain.set(\amp, value)},
-
 		{
-
-			// if aux on, assign the 4 first knobs
-			if (~isAuxOn,{
-					switch(knob,
-						0, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p0,value);});},
-						1, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p1,value);});},
-						2, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p2,value);});},
-						3, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p3,value);});},
-					);
-
-			},{
-
-			});
+			// assign the 4 first knobs to parameters, when the note is pressed. octatrack style.
+			switch(knob,
+				0, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p0,value);});},
+				1, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p1,value);});},
+				2, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p2,value);});},
+				3, {if (~voices[~currentPressedNote]!=nil, {~voices[~currentPressedNote].set(\p3,value);});},
+			);
 		}
 	);
 };
+
 // register knob callback
 ~knobs.addDependant(~knobfunc);
 
