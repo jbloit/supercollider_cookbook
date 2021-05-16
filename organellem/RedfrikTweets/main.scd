@@ -1,8 +1,13 @@
 // play tweets by redfrik
 
 // test
-// a=Synth(\t3)
-// a.free
+a=Synth(\t1)
+a.set(\p0, 0.3)
+a.set(\p1, 0.2)
+a.set(\p2, 0.2)
+a.set(\p3, 0.9)
+a.set(\p0, 1,\p1,1,\p2,1,\p3,1)
+a.free
 
 ~voices = Dictionary.new;
 
@@ -17,10 +22,12 @@ SynthDef(\masterGain,
 
 
 SynthDef(\t1, {
-	|amp=0.1, pan=0, out=0, gate=1|
+	|amp=0.1, pan=0, out=0, gate=1, p0=1, p1=1, p2=1, p3=1|
 	var sig, a, env;
 	a=LFTri;
-	sig=LFPulse.ar(a.ar(Duty.ar(1/8,0,Dswitch([Dseq((1..8),4),Dseq([60,1,2],[4,3])]/2,Dseq([0,1],99))*99),0,3e3,300));
+
+
+	sig=LFPulse.ar(a.ar(Duty.ar(1/(p0*7+1),0,Dswitch([Dseq((1..8),4),Dseq([60,1,2],[4,3])]/2,Dseq([0,1],(p1*99)))*(p2*99)),0,3e3,(p3*300)));
 	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
 	Out.ar(out, Pan2.ar(sig*env, pan));
 }
