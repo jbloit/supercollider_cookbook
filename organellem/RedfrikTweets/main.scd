@@ -44,8 +44,8 @@ SynthDef(\t2, {
 	|amp=0.1, pan=0, out=0, gate=1,p0=1, p1=1, p2=1, p3=1|
 	var sig, env;
 
-	//--tweet0000 (LOUD!)
-	sig = {GlitchRHPF.ar(GbmanN.ar([p0*2300,1150]),LFSaw.ar(Pulse.ar(p1*3+1,[1,2]/8,1,LFPulse.ar(1/(1+p2*7))/5+1))+(p3+1))};
+//--tweet0016
+sig = {b=LocalBuf(9e4,2).clear;i=Sweep.ar(BufRd.ar(2,b,Saw.ar(p0*12,3e4,p3*4e4)),9e4);BufWr.ar(Saw.ar([p1*8, p2*9]),b,i);BufRd.ar(2,b,i)/2};
 
 	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
 	Out.ar(out, Pan2.ar(sig*env, pan));
@@ -64,17 +64,6 @@ SynthDef(\t3, {
 }
 ).add;
 
-SynthDef(\t4, {
-	|amp=0.1, pan=0, out=0, gate=1,p0=1, p1=1, p2=1, p3=1|
-	var sig, env;
-
-//--tweet0008
-	sig = {x=LFNoise1.ar(0.5!2);Formlet.ar(Crackle.ar(x.range(1.8,1.98)),TExpRand.ar(200,2e3,x).lag(2),x.range(5e-4,1e-3),0.0012)};
-
-	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
-	Out.ar(out, Pan2.ar(sig*env, pan));
-}
-).add;
 
 
 ~masterGain = Synth(\masterGain);
