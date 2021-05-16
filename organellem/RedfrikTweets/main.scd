@@ -50,6 +50,18 @@ SynthDef(\t3, {
 }
 ).add;
 
+SynthDef(\t4, {
+	|amp=0.1, pan=0, out=0, gate=1|
+	var sig, env;
+
+//--tweet0008
+	sig = {x=LFNoise1.ar(0.5!2);Formlet.ar(Crackle.ar(x.range(1.8,1.98)),TExpRand.ar(200,2e3,x).lag(2),x.range(5e-4,1e-3),0.0012)};
+
+	env = EnvGen.ar(Env.adsr(),gate,doneAction:2, levelScale:amp);
+	Out.ar(out, Pan2.ar(sig*env, pan));
+}
+).add;
+
 
 ~masterGain = Synth(\masterGain);
 
